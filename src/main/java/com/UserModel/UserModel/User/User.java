@@ -42,6 +42,13 @@ public class User implements UserDetails {
     private Role role;
 
 
+    public void setProperties(HashMap<String, String> properties) {
+        this.properties.putAll(properties);
+    }
+
+    public void setNewProperties(Map<String, String> properties) {
+        this.properties = properties;
+    }
 
     @Override
     public String toString() {

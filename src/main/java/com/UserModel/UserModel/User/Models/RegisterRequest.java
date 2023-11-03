@@ -1,4 +1,4 @@
-package com.UserModel.UserModel.User;
+package com.UserModel.UserModel.User.Models;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,7 +9,9 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class LoginRequest {
+public class RegisterRequest {
+    private String firstname;
+    private  String lastname;
     private  String email;
     private  String password;
 }

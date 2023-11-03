@@ -1,15 +1,16 @@
-package com.UserModel.UserModel.User;
+package com.UserModel.UserModel.User.Models;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
+
 @Builder
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class AuthenticationResponse {
-    private String token;
-    private String refreshToken;
+public class RemoveProperties {
+    private ArrayList<String> properties;
 }
