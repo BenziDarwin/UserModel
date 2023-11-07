@@ -5,7 +5,9 @@ import com.UserModel.UserModel.Token.TokenRepository;
 import com.UserModel.UserModel.Token.TokenType;
 import com.UserModel.UserModel.User.Config.JwtService;
 import com.UserModel.UserModel.User.Models.LoginRequest;
+import com.UserModel.UserModel.User.Models.Passwords;
 import com.UserModel.UserModel.User.Models.RegisterRequest;
+import com.UserModel.UserModel.User.Models.UpdateUser;
 import jakarta.security.auth.message.AuthException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -33,6 +35,7 @@ public class UserService {
     private final AuthenticationManager authenticationManager;
     private final TokenRepository tokenRepository;
 
+
     public AuthenticationResponse register(RegisterRequest request) throws AuthException {
         var findUser = userRepository.findUserByEmail(request.getEmail());
         if(findUser.isPresent()) {
@@ -43,7 +46,8 @@ public class UserService {
                     .firstname(request.getFirstname())
                     .lastname(request.getLastname())
                     .email(request.getEmail())
-                    .role(Role.USER)
+                    .persona(Persona.USER)
+                    .profileImage(request.getProfileImage())
                     .password(passwordEncoder.encode(request.getPassword())).build();
             var savedUser = userRepository.save(user);
             var jwtToken = jwtService.generateToken(user);
@@ -79,7 +83,7 @@ public class UserService {
         var user = userRepository.findUserByEmail(auth.getName()).orElseThrow();
         user.setProperties(properties);
         HashMap<String, String> res = new HashMap<>();
-        res.put("result","sucess");
+        res.put("result","success");
         return res;
     }
 
@@ -90,8 +94,39 @@ public class UserService {
         Map<String,String> prt = deleteKeys(user.getProperties(),properties);
         user.setNewProperties(prt);
         HashMap<String, String> res = new HashMap<>();
-        res.put("result","sucess");
+        res.put("result","success");
         return res;
+    }
+
+    @Transactional
+    public HashMap<String, String> editInfo(UpdateUser updateUser) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        var user = userRepository.findUserByEmail(auth.getName()).orElseThrow();
+        user.setProperties(updateUser.getProperties());
+        user.setEmail(user.getEmail());
+        user.setFirstname(user.getFirstname());
+        user.setLastname(user.getLastname());
+        user.setProfileImage(user.getProfileImage());
+        HashMap<String, String> res = new HashMap<>();
+        res.put("result","success");
+        return res;
+    }
+
+    @Transactional
+    public HashMap<String, String> changePassword(Passwords passwords) throws AuthException {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        var user = userRepository.findUserByEmail(auth.getName()).orElseThrow();
+        var checkPassword = passwordEncoder.matches(passwords.getOldPassword(), user.getPassword());
+        if(checkPassword) {
+            user.setPassword(passwordEncoder.encode(passwords.getNewPassword()));
+            user.setProfileImage(user.getProfileImage());
+            HashMap<String, String> res = new HashMap<>();
+            res.put("result","success");
+            return res;
+        } else {
+            throw new AuthException("Old password is incorrect!");
+        }
+
     }
 
     private Map<String, String> deleteKeys(Map<String, String> properties, ArrayList<String> array) {

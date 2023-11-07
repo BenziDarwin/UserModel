@@ -5,14 +5,16 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @Data
-@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class RegisterRequest {
+@Builder
+public class UpdateUser {
     private String firstname;
     private  String lastname;
     private  String email;
-    private  String password;
-    private String profileImage;
+    HashMap<String, String> properties = new HashMap<String, String>();
 }

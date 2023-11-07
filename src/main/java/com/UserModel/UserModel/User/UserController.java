@@ -1,9 +1,6 @@
 package com.UserModel.UserModel.User;
 
-import com.UserModel.UserModel.User.Models.LoginRequest;
-import com.UserModel.UserModel.User.Models.Properties;
-import com.UserModel.UserModel.User.Models.RegisterRequest;
-import com.UserModel.UserModel.User.Models.RemoveProperties;
+import com.UserModel.UserModel.User.Models.*;
 import jakarta.security.auth.message.AuthException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -37,6 +34,20 @@ public class UserController {
     @PostMapping("/delete-properties")
     public ResponseEntity<HashMap<String, String>> addProperty(@RequestBody RemoveProperties properties) {
         return ResponseEntity.ok(userService.removeProperties(properties.getProperties()));
+    }
+
+    @PostMapping("/edit-info")
+    public ResponseEntity<HashMap<String, String>> editInfo(@RequestBody UpdateUser user) {
+        return ResponseEntity.ok(userService.editInfo(user));
+    }
+
+    @PostMapping("/change-password")
+    public ResponseEntity<HashMap<String, String>> changePassword(@RequestBody Passwords passwords) {
+        try {
+            return ResponseEntity.ok(userService.changePassword(passwords));
+        } catch (AuthException e) {
+            throw new RuntimeException(e);
+        }
     }
 
 }

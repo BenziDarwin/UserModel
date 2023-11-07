@@ -1,5 +1,6 @@
 package com.UserModel.UserModel.User;
 
+import com.UserModel.UserModel.Roles.Roles;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
@@ -34,12 +35,16 @@ public class User implements UserDetails {
     private  String lastname;
     private  String email;
     private  String password;
+    private String profileImage;
     @ElementCollection
     @MapKeyColumn(name="myMapKey")
     @Column(name="myMapValue")
     Map<String, String> properties = new HashMap<String, String>();
     @Enumerated(EnumType.STRING)
-    private Role role;
+    private Persona persona;
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "role_id", referencedColumnName = "id")
+    private Roles role;
 
 
     public void setProperties(HashMap<String, String> properties) {
@@ -62,7 +67,7 @@ public class User implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority(role.name()));
+        return List.of(new SimpleGrantedAuthority(persona.name()));
     }
 
     @Override
