@@ -1,4 +1,4 @@
-package com.UserModel.UserModel.User.Config;
+package com.UserModel.UserModel.Config;
 
 import com.UserModel.UserModel.User.UsersRepository;
 import lombok.RequiredArgsConstructor;

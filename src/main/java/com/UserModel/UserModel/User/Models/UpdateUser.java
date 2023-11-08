@@ -16,5 +16,7 @@ public class UpdateUser {
     private String firstname;
     private  String lastname;
     private  String email;
+    private String profileImage;
+    private String role;
     HashMap<String, String> properties = new HashMap<String, String>();
 }

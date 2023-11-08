@@ -1,4 +1,4 @@
-package com.UserModel.UserModel.User.Config;
+package com.UserModel.UserModel.Config;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;

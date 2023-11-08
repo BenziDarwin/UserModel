@@ -1,5 +1,7 @@
-package com.UserModel.UserModel.User.Models;
+package com.UserModel.UserModel.ResetTokens.Models;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -7,10 +9,10 @@ import lombok.NoArgsConstructor;
 
 @Data
 @Builder
-@AllArgsConstructor
 @NoArgsConstructor
-public class Passwords {
+@AllArgsConstructor
+public class TokenModel {
+    private String token;
     private String email;
-    private String oldPassword;
     private String newPassword;
 }
