@@ -29,6 +29,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -127,6 +128,18 @@ public class UserService {
     }
 
     @Transactional
+    public HashMap<String, Object> verify() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        var user = userRepository.findUserByEmail(auth.getName()).orElseThrow();
+        HashMap<String,Object> res = new HashMap<>();
+        res.put("email",user.getEmail());
+        res.put("role",user.getRole().getRoleName());
+        res.put("persona",user.getPersona().name());
+        res.put("permissions", user.getRole().getPermissions());
+        return res;
+    }
+
+    @Transactional
     public HashMap<String,String> removeProperties(ArrayList<String> properties) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         var user = userRepository.findUserByEmail(auth.getName()).orElseThrow();
@@ -152,7 +165,7 @@ public class UserService {
                 Roles role = rolesRepository.findRolesByName(updateUser.getRole().toUpperCase()).orElseThrow();
                 user.setRole(role);
             } else {
-                throw new AuthException("Insufficent permissions!");
+                throw new AuthException("Insufficient permissions!");
             }
         } catch (Exception e) {
             res.put("error", e.getMessage());

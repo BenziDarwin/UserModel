@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -24,14 +25,17 @@ public class RolesService {
     public HashMap<String, String> addRole(Role role) throws Exception {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         User user = userRepository.findUserByEmail(auth.getName()).orElseThrow();
-                if(user.getPersona().equals(Persona.ADMIN)||user.getRole().getRoleName().equalsIgnoreCase("ADMIN")) {
+        if(user.getPersona().equals(Persona.ADMIN)||user.getRole().getRoleName().equalsIgnoreCase("ADMIN")) {
             Optional<Roles> getRole = rolesRepository.findRolesByName(role.getRoleName().toUpperCase());
             if(getRole.isPresent()) {
                 throw new Exception("This role already exists!");
             } else {
+                ArrayList<String> lst = role.getPermissions();
+                lst.forEach(permission -> permission.toUpperCase());
+                lst.stream().filter(permission -> List.of("WRITE", "READ","DELETE","UPDATE").contains(permission));
                 Roles newRole = Roles.builder()
                         .roleName(role.getRoleName().toUpperCase())
-                        .permissions(role.getPermissions()).build();
+                        .permissions(lst).build();
                 rolesRepository.save(newRole);
                 HashMap<String, String> res = new HashMap<>();
                 res.put("result", "success");
@@ -62,7 +66,10 @@ public class RolesService {
         var user = userRepository.findUserByEmail(auth.getName()).orElseThrow();
         if(user.getPersona() == Persona.ADMIN || user.getRole().getRoleName().equalsIgnoreCase("ADMIN")) {
             Roles checkRole = rolesRepository.findRolesByName(role.getRoleName().toUpperCase()).orElseThrow(() -> new IllegalArgumentException("Invalid role name!"));
-            checkRole.setPermissions(role.getPermissions());
+            ArrayList<String> lst = role.getPermissions();
+            lst.forEach(permission -> permission.toUpperCase());
+            lst.stream().filter(permission -> List.of("WRITE", "READ","DELETE","UPDATE").contains(permission));
+            checkRole.setPermissions(lst);
             HashMap<String, String> res = new HashMap<>();
             res.put("result", "success");
             return res;

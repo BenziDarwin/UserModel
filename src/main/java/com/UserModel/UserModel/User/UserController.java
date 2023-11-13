@@ -80,4 +80,9 @@ public class UserController {
         }
     }
 
+    @GetMapping("/verify")
+    public ResponseEntity<HashMap<String,Object>> verify() {
+        return ResponseEntity.ok(userService.verify());
+    }
+
 }
