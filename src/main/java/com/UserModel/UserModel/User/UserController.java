@@ -16,6 +16,7 @@ import java.util.logging.Handler;
 @RestController
 @RequestMapping("/api/v1/user")
 @RequiredArgsConstructor
+@CrossOrigin(origins = "*")
 public class UserController {
     private final UserService userService;
 

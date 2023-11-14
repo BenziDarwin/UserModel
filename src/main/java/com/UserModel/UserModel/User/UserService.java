@@ -65,7 +65,10 @@ public class UserService {
             var refreshToken = jwtService.generateRefreshToken(user);
             saveUserToken(savedUser, jwtToken);
             return AuthenticationResponse
-                    .builder().token(jwtToken).refreshToken(refreshToken)
+                    .builder()
+                    .token(jwtToken)
+                    .refreshToken(refreshToken)
+                    .user(user)
                     .build();
         }
     }
