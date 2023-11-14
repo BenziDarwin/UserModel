@@ -90,7 +90,10 @@ public class UserService {
             var refreshToken = jwtService.generateRefreshToken(user);
             saveUserToken(savedUser, jwtToken);
             return AuthenticationResponse
-                    .builder().token(jwtToken).refreshToken(refreshToken)
+                    .builder()
+                    .token(jwtToken)
+                    .refreshToken(refreshToken)
+                    .user(user)
                     .build();
         }
     }
@@ -114,6 +117,7 @@ public class UserService {
         return AuthenticationResponse.builder()
                 .token(jwtToken)
                 .refreshToken(refreshToken)
+                .user(user)
                 .build();
     }
 
@@ -132,9 +136,9 @@ public class UserService {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         var user = userRepository.findUserByEmail(auth.getName()).orElseThrow();
         HashMap<String,Object> res = new HashMap<>();
-        res.put("email",user.getEmail());
-        res.put("role",user.getRole().getRoleName());
-        res.put("persona",user.getPersona().name());
+        res.put("email", user.getEmail());
+        res.put("role", user.getRole().getRoleName());
+        res.put("persona", user.getPersona().name());
         res.put("permissions", user.getRole().getPermissions());
         return res;
     }

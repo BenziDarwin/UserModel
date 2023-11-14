@@ -30,6 +30,7 @@ public class Roles {
     private Long id;
     private String roleName;
     private ArrayList<String> permissions;
+    private ArrayList<String> activities;
     @OneToMany(cascade = CascadeType.DETACH)
     @Column(name = "role")
     private Collection<User> user;

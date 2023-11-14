@@ -1,14 +1,13 @@
 package com.UserModel.UserModel.Roles;
 
 import com.UserModel.UserModel.Roles.Models.Role;
+import jakarta.security.auth.message.AuthException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/roles")
@@ -41,5 +40,28 @@ public class RolesController {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @PostMapping("/update-activities")
+    public ResponseEntity<HashMap<String, String>> updateActivities(@RequestBody Role role) {
+        try {
+            return ResponseEntity.ok(rolesService.updateActivities(role));
+        } catch (AuthException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @GetMapping("/view-role/{id}")
+    public ResponseEntity<Roles> viewRole(@PathVariable("id") Long id) {
+        try {
+            return ResponseEntity.ok(rolesService.viewRole(id));
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @GetMapping("/view-all-roles")
+    public ResponseEntity<List<Roles>> getRoles() {
+        return ResponseEntity.ok(rolesService.getRoles());
     }
 }

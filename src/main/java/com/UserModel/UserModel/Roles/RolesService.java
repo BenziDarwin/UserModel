@@ -34,8 +34,10 @@ public class RolesService {
                 lst.forEach(permission -> permission.toUpperCase());
                 lst.stream().filter(permission -> List.of("WRITE", "READ","DELETE","UPDATE").contains(permission));
                 Roles newRole = Roles.builder()
-                        .roleName(role.getRoleName().toUpperCase())
-                        .permissions(lst).build();
+                        .roleName(role.getRoleName().toUpperCase().strip())
+                        .permissions(lst)
+                        .activities(role.getActivities())
+                        .build();
                 rolesRepository.save(newRole);
                 HashMap<String, String> res = new HashMap<>();
                 res.put("result", "success");
@@ -77,6 +79,21 @@ public class RolesService {
             throw new AuthException("Insufficient Permissions to update role permissions!");
         }
     }
+
+    @Transactional
+    public HashMap<String, String> updateActivities(Role role) throws AuthException {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        var user = userRepository.findUserByEmail(auth.getName()).orElseThrow();
+        if(user.getPersona() == Persona.ADMIN || user.getRole().getRoleName().equalsIgnoreCase("ADMIN")) {
+            Roles checkRole = rolesRepository.findRolesByName(role.getRoleName().toUpperCase()).orElseThrow(() -> new IllegalArgumentException("Invalid role name!"));
+            checkRole.setActivities(role.getActivities());
+            HashMap<String, String> res = new HashMap<>();
+            res.put("result", "success");
+            return res;
+        } else {
+            throw new AuthException("Insufficient Permissions to update role permissions!");
+        }
+    }
     @Transactional
     public HashMap<String, String> updateUserRole(String role, Long userId) throws AuthException {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -90,5 +107,13 @@ public class RolesService {
         }else {
             throw new AuthException("Insufficient Permissions to update User Role!");
         }
+    }
+
+    public List<Roles> getRoles() {
+        return rolesRepository.findAll();
+    }
+
+    public Roles viewRole(Long id) throws Exception {
+        return rolesRepository.findById(id).orElseThrow(()-> new Exception("Role doesn't exist!"));
     }
 }
