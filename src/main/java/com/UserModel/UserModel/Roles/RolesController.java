@@ -25,6 +25,20 @@ public class RolesController {
         }
     }
 
+    @GetMapping("/get-roles")
+    public  ResponseEntity<List<Roles>> getAllRoles() {
+        return ResponseEntity.ok(rolesService.getAllRoles());
+    }
+
+    @PostMapping("/update-role")
+    public  ResponseEntity<HashMap<String, String>> updateRole(@RequestBody Role role) {
+        try {
+            return ResponseEntity.ok(rolesService.updateRole(role));
+        } catch (AuthException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     @PostMapping("/delete-role")
     public ResponseEntity<HashMap<String, String>> deleteRole(@RequestBody Role role) {
         try {

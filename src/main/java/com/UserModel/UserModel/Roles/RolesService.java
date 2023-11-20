@@ -48,6 +48,8 @@ public class RolesService {
         }
 
     }
+
+
     public HashMap<String, String> removeRole(String roleName) throws AuthException {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         var user = userRepository.findUserByEmail(auth.getName()).orElseThrow();
@@ -60,6 +62,10 @@ public class RolesService {
         } else {
             throw new AuthException("Insufficient Permissions to remove Role!");
         }
+    }
+
+    public List<Roles> getAllRoles() {
+        return rolesRepository.findAll();
     }
 
     @Transactional
@@ -107,6 +113,25 @@ public class RolesService {
         }else {
             throw new AuthException("Insufficient Permissions to update User Role!");
         }
+    }
+
+    @Transactional
+    public HashMap<String,String> updateRole(Role role) throws AuthException {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        var user = userRepository.findUserByEmail(auth.getName()).orElseThrow();
+        if(user.getPersona() == Persona.ADMIN || user.getRole().getRoleName().equalsIgnoreCase("ADMIN")) {
+            Roles checkRole = rolesRepository.findRolesByName(role.getRoleName().toUpperCase()).orElseThrow(() -> new IllegalArgumentException("Invalid role name!"));
+            checkRole.setRoleName(role.getRoleName().toUpperCase().strip());
+            checkRole.setWeight(role.getWeight());
+            checkRole.setPermissions(role.getPermissions());
+            checkRole.setActivities(role.getActivities());
+            HashMap<String, String> res = new HashMap<>();
+            res.put("result", "success");
+            return res;
+        }else {
+            throw new AuthException("Insufficient Permissions to update User Role!");
+        }
+
     }
 
     public List<Roles> getRoles() {

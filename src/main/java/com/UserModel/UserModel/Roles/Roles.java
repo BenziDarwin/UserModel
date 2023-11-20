@@ -29,6 +29,7 @@ public class Roles {
     )
     private Long id;
     private String roleName;
+    private Integer weight;
     private ArrayList<String> permissions;
     private ArrayList<String> activities;
     @OneToMany(cascade = CascadeType.DETACH)
