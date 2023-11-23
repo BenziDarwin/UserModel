@@ -29,6 +29,11 @@ public class UserController {
     public ResponseEntity<AuthenticationResponse> registerUser(@RequestBody RegisterRequest request) throws AuthException {
         return ResponseEntity.ok(userService.registerUser(request));
     }
+
+    @PostMapping("/user-details")
+    public ResponseEntity<HashMap<String, String>> userDetails(@RequestBody LoginRequest request) {
+        return ResponseEntity.ok(userService.getUserByEmail(request.getEmail()));
+    }
     @PostMapping("/login")
     public ResponseEntity<AuthenticationResponse> login(@RequestBody LoginRequest request) {
         try {

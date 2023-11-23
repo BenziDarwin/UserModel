@@ -15,7 +15,7 @@ public class DatabaseInit implements CommandLineRunner {
     private RolesRepository rolesRepository;
     @Override
     public void run(String... args) {
-        Roles role = Roles.builder().roleName("ADMIN").permissions(new ArrayList<>(List.of("WRITE","READ","UPDATE","DELETE"))).build();
+        Roles role = Roles.builder().roleName("ADMIN").weight(1).permissions(new ArrayList<>(List.of("WRITE","READ","UPDATE","DELETE"))).build();
         Optional<Roles> checkRole = rolesRepository.findRolesByName("ADMIN");
         if(checkRole.isEmpty()) {
             rolesRepository.save(role);

@@ -146,6 +146,14 @@ public class UserService {
         return res;
     }
 
+    public HashMap<String, String> getUserByEmail(String email) {
+        User val = userRepository.findUserByEmail(email).orElseThrow();
+        HashMap<String, String> res = new HashMap<>();
+        res.put("firstName", val.getFirstname());
+        res.put("lastName", val.getLastname());
+        return res;
+    }
+
     @Transactional
     public HashMap<String,String> removeProperties(ArrayList<String> properties) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
