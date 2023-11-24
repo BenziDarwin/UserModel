@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.logging.Handler;
 
 
@@ -33,6 +34,11 @@ public class UserController {
     @PostMapping("/user-details")
     public ResponseEntity<HashMap<String, String>> userDetails(@RequestBody LoginRequest request) {
         return ResponseEntity.ok(userService.getUserByEmail(request.getEmail()));
+    }
+
+    @GetMapping("/get-users")
+    public ResponseEntity<List<User>> getAllUsers() {
+        return ResponseEntity.ok(userService.getAllUsers());
     }
     @PostMapping("/login")
     public ResponseEntity<AuthenticationResponse> login(@RequestBody LoginRequest request) {
