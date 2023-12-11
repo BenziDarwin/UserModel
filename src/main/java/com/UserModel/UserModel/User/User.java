@@ -36,6 +36,7 @@ public class User implements UserDetails {
     private  String email;
     private  String password;
     private String profileImage;
+
     @ElementCollection
     @MapKeyColumn(name="myMapKey")
     @Column(name="myMapValue")
@@ -45,7 +46,6 @@ public class User implements UserDetails {
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "role_id", referencedColumnName = "id")
     private Roles role;
-
 
     public void setProperties(HashMap<String, String> properties) {
         this.properties.putAll(properties);

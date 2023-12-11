@@ -1,9 +1,5 @@
 package com.UserModel.UserModel.columns;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-
 public class DBColum {
     private String name;
     private String table_name;

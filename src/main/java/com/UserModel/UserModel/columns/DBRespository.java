@@ -7,4 +7,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface DBRespository {
     void createDatabaseColumn(String sql);
+    void deleteDatabaseColumn(String sql);
 }
