@@ -32,30 +32,31 @@ import java.util.*;
 @RequiredArgsConstructor
 public class UserService {
 
-    private final UsersRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
-    private final JwtService jwtService;
-    private final AuthenticationManager authenticationManager;
-    private final TokenRepository tokenRepository;
-    private final MailingServiceService mailingService;
-    private final ResetTokensRepository resetRepository;
-    private final RolesRepository rolesRepository;
+    private UsersRepository userRepository;
+    private PasswordEncoder passwordEncoder;
+    private JwtService jwtService;
+    private AuthenticationManager authenticationManager;
+    private TokenRepository tokenRepository;
+    private MailingServiceService mailingService;
+    private ResetTokensRepository resetRepository;
+    private RolesRepository rolesRepository;
 
-    public AuthenticationResponse registerAdmin(RegisterRequest request) throws AuthException {
+    public AuthenticationResponse registerAdmin(User user) throws AuthException {
         var findUser = userRepository.findUserByEmail(request.getEmail());
         if (findUser.isPresent()) {
             throw new AuthException("User email already exists!");
         } else {
             Roles rl = rolesRepository.findRolesByName(request.getRole().toUpperCase()).orElseThrow();
-            var user = User
+            var request = User
                     .builder()
-                    .firstname(request.getFirstname())
-                    .lastname(request.getLastname())
-                    .email(request.getEmail())
+                    .firstname(user.getFirstname())
+                    .lastname(user.getLastname())
+                    .email(user.getEmail())
                     .persona(Persona.ADMIN)
-                    .profileImage(request.getProfileImage())
+                    .profileImage(user.getProfileImage())
                     .role(rl)
-                    .password(passwordEncoder.encode(request.getPassword())).build();
+                    .password(passwordEncoder.encode(user.getPassword())).build();
+
             var savedUser = userRepository.save(user);
             var jwtToken = jwtService.generateToken(user);
             var refreshToken = jwtService.generateRefreshToken(user);
@@ -71,6 +72,7 @@ public class UserService {
 
     public AuthenticationResponse registerUser(RegisterRequest request) throws AuthException {
         var findUser = userRepository.findUserByEmail(request.getEmail());
+
         if (findUser.isPresent()) {
             throw new AuthException("User email already exists!");
         } else {
@@ -83,11 +85,17 @@ public class UserService {
                     .persona(Persona.USER)
                     .profileImage(request.getProfileImage())
                     .role(rl)
-                    .password(passwordEncoder.encode(request.getPassword())).build();
+                    .password(passwordEncoder.encode(request.getPassword()))
+                    .build();
+
             var savedUser = userRepository.save(user);
+
             var jwtToken = jwtService.generateToken(user);
+
             var refreshToken = jwtService.generateRefreshToken(user);
+
             saveUserToken(savedUser, jwtToken);
+
             return AuthenticationResponse
                     .builder()
                     .token(jwtToken)
