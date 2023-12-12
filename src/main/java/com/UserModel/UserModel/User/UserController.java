@@ -37,6 +37,7 @@ public class UserController {
     public ResponseEntity<List<User>> getAllUsers() {
         return ResponseEntity.ok(userService.getAllUsers());
     }
+
     @PostMapping("/login")
     public ResponseEntity<AuthenticationResponse> login(@RequestBody LoginRequest request) {
         try {
@@ -90,7 +91,7 @@ public class UserController {
     }
 
     @GetMapping("/verify")
-    public ResponseEntity<HashMap<String,Object>> verify() {
+    public ResponseEntity<HashMap<String, Object>> verify() {
         return ResponseEntity.ok(userService.verify());
     }
 

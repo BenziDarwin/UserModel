@@ -41,10 +41,9 @@ public class UserService {
     private final ResetTokensRepository resetRepository;
     private final RolesRepository rolesRepository;
 
-
     public AuthenticationResponse registerAdmin(RegisterRequest request) throws AuthException {
         var findUser = userRepository.findUserByEmail(request.getEmail());
-        if(findUser.isPresent()) {
+        if (findUser.isPresent()) {
             throw new AuthException("User email already exists!");
         } else {
             Roles rl = rolesRepository.findRolesByName(request.getRole().toUpperCase()).orElseThrow();
@@ -72,7 +71,7 @@ public class UserService {
 
     public AuthenticationResponse registerUser(RegisterRequest request) throws AuthException {
         var findUser = userRepository.findUserByEmail(request.getEmail());
-        if(findUser.isPresent()) {
+        if (findUser.isPresent()) {
             throw new AuthException("User email already exists!");
         } else {
             Roles rl = rolesRepository.findRolesByName(request.getRole().toUpperCase()).orElseThrow();
@@ -107,7 +106,7 @@ public class UserService {
         );
         var user = userRepository.findUserByEmail(request.getEmail()).orElseThrow();
         var checkPassword = passwordEncoder.matches(request.getPassword(), user.getPassword());
-        if(!checkPassword) {
+        if (!checkPassword) {
             throw new AuthException("Password or Email is incorrect!");
         }
         var jwtToken = jwtService.generateToken(user);
@@ -126,12 +125,12 @@ public class UserService {
     }
 
     @Transactional
-    public HashMap<String,String> addProperties(HashMap<String,String> properties) {
+    public HashMap<String, String> addProperties(HashMap<String, String> properties) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         var user = userRepository.findUserByEmail(auth.getName()).orElseThrow();
         user.setProperties(properties);
         HashMap<String, String> res = new HashMap<>();
-        res.put("result","success");
+        res.put("result", "success");
         return res;
     }
 
@@ -139,7 +138,7 @@ public class UserService {
     public HashMap<String, Object> verify() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         var user = userRepository.findUserByEmail(auth.getName()).orElseThrow();
-        HashMap<String,Object> res = new HashMap<>();
+        HashMap<String, Object> res = new HashMap<>();
         res.put("email", user.getEmail());
         res.put("role", user.getRole().getRoleName());
         res.put("persona", user.getPersona().name());
@@ -156,13 +155,13 @@ public class UserService {
     }
 
     @Transactional
-    public HashMap<String,String> removeProperties(ArrayList<String> properties) {
+    public HashMap<String, String> removeProperties(ArrayList<String> properties) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         var user = userRepository.findUserByEmail(auth.getName()).orElseThrow();
-        Map<String,String> prt = deleteKeys(user.getProperties(),properties);
+        Map<String, String> prt = deleteKeys(user.getProperties(), properties);
         user.setNewProperties(prt);
         HashMap<String, String> res = new HashMap<>();
-        res.put("result","success");
+        res.put("result", "success");
         return res;
     }
 
@@ -177,7 +176,7 @@ public class UserService {
         user.setProfileImage(updateUser.getProfileImage());
         HashMap<String, String> res = new HashMap<>();
         try {
-            if(user.getRole().getRoleName().equals("ADMIN") || user.getPersona().equals(Persona.ADMIN)) {
+            if (user.getRole().getRoleName().equals("ADMIN") || user.getPersona().equals(Persona.ADMIN)) {
                 Roles role = rolesRepository.findRolesByName(updateUser.getRole().toUpperCase()).orElseThrow();
                 user.setRole(role);
             } else {
@@ -186,7 +185,7 @@ public class UserService {
         } catch (Exception e) {
             res.put("error", e.getMessage());
         }
-        res.put("result","success");
+        res.put("result", "success");
         return res;
     }
 
@@ -195,11 +194,11 @@ public class UserService {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         var user = userRepository.findUserByEmail(auth.getName()).orElseThrow();
         var checkPassword = passwordEncoder.matches(passwords.getOldPassword(), user.getPassword());
-        if(checkPassword) {
+        if (checkPassword) {
             user.setPassword(passwordEncoder.encode(passwords.getNewPassword()));
             user.setProfileImage(user.getProfileImage());
             HashMap<String, String> res = new HashMap<>();
-            res.put("result","success");
+            res.put("result", "success");
             return res;
         } else {
             throw new AuthException("Old password is incorrect!");
@@ -214,20 +213,20 @@ public class UserService {
         MailingDetails details = MailingDetails
                 .builder()
                 .recipient(new String[]{user.getEmail()})
-                .msgBody("Default password: "+password).subject("One Time Password").build();
+                .msgBody("Default password: " + password).subject("One Time Password").build();
         mailingService.sendMail(details, "bob.wabusa@coseke.com");
         ResetTokens tokens = ResetTokens.builder().token(password).email(email).build();
         resetRepository.save(tokens);
         HashMap<String, String> res = new HashMap<>();
-        res.put("result","success");
+        res.put("result", "success");
         return res;
     }
 
     @Transactional
     public AuthenticationResponse validateToken(TokenModel model) throws AuthException {
         ResetTokens tokens = resetRepository.findResetTokensWithTokenAndEmail(model.getToken(), model.getEmail()).orElseThrow();
-        var user = userRepository.findUserByEmail(tokens.getEmail()).orElseThrow(()-> new AuthException("User doesn't exist!"));
-        if(!model.getNewPassword().isBlank()) {
+        var user = userRepository.findUserByEmail(tokens.getEmail()).orElseThrow(() -> new AuthException("User doesn't exist!"));
+        if (!model.getNewPassword().isBlank()) {
             user.setPassword(passwordEncoder.encode(model.getNewPassword()));
         }
         var jwtToken = jwtService.generateToken(user);
@@ -249,12 +248,12 @@ public class UserService {
         MailingDetails details = MailingDetails
                 .builder()
                 .recipient(new String[]{user.getEmail()})
-                .msgBody("Default password: "+password).subject("One Time Password").build();
+                .msgBody("Default password: " + password).subject("One Time Password").build();
         mailingService.sendMail(details, "bob.wabusa@coseke.com");
         ResetTokens tokens = ResetTokens.builder().token(password).email(user.getEmail()).build();
         resetRepository.save(tokens);
         HashMap<String, String> res = new HashMap<>();
-        res.put("result","success");
+        res.put("result", "success");
         return res;
     }
 

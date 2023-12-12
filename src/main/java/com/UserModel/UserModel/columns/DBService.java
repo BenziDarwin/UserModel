@@ -30,7 +30,6 @@ public class DBService implements DBRespository {
         }
     }
 
-
     @Override
     @Transactional
     public void deleteDatabaseColumn(String sql) {
@@ -40,7 +39,6 @@ public class DBService implements DBRespository {
             throw new RuntimeException(e.getMessage());
         }
     }
-
 
     @Transactional
     public List<Map<String, Object>> getAllColumnsWithTypes(String tableName) {
