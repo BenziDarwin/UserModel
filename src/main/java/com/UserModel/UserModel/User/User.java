@@ -42,10 +42,10 @@ public class User implements UserDetails {
     Map<String, String> properties = new HashMap<String, String>();
     @Enumerated(EnumType.STRING)
     private Persona persona;
+
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "role_id", referencedColumnName = "id")
     private Roles role;
-
 
     public void setProperties(HashMap<String, String> properties) {
         this.properties.putAll(properties);

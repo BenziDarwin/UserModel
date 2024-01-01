@@ -13,7 +13,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Handler;
 
-
 @RestController
 @RequestMapping("/api/v1/user")
 @RequiredArgsConstructor
