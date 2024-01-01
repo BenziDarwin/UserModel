@@ -1,7 +1,5 @@
 package com.UserModel.UserModel.task;
 
-import com.UserModel.UserModel.Roles.Roles;
-import com.UserModel.UserModel.User.Persona;
 import com.UserModel.UserModel.User.User;
 import com.UserModel.UserModel.User.UsersRepository;
 import org.springframework.beans.factory.annotation.Autowired;
