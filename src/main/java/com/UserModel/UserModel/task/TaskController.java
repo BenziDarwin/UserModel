@@ -16,11 +16,11 @@ public class TaskController {
     @Autowired
     private TaskService taskService;
 
-    @PostMapping("/tasks")
-    public ResponseEntity<?> createTask(@RequestBody Task task){
+    @PostMapping("/tasks/{userID}")
+    public ResponseEntity<?> createTask( @PathVariable Long userID, @RequestBody Task task){
 
         try{
-            Task response = taskService.createTask(task);
+            Task response = taskService.createTask(task, userID);
             return new ResponseEntity<>(response, HttpStatus.CREATED);
         } catch (Exception e){
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);

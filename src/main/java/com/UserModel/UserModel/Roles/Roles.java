@@ -32,6 +32,7 @@ public class Roles {
     private Integer weight;
     private ArrayList<String> permissions;
     private ArrayList<String> activities;
+
     @OneToMany(cascade = CascadeType.DETACH)
     @Column(name = "role")
     private Collection<User> user;

@@ -1,6 +1,7 @@
 package com.UserModel.UserModel.User;
 
 import com.UserModel.UserModel.Roles.Roles;
+import com.UserModel.UserModel.task.Task;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
@@ -46,6 +47,10 @@ public class User implements UserDetails {
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "role_id", referencedColumnName = "id")
     private Roles role;
+
+    @OneToMany(cascade = CascadeType.DETACH)
+    @Column(name = "tasks")
+    private Collection<Task> tasks;
 
     public void setProperties(HashMap<String, String> properties) {
         this.properties.putAll(properties);

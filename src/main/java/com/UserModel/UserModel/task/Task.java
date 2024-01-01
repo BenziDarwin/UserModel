@@ -1,6 +1,9 @@
 package com.UserModel.UserModel.task;
 
+import com.UserModel.UserModel.User.User;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -8,6 +11,8 @@ import java.util.Date;
 
 @Entity
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
 @Data
 @Table(name = "tasks")
 public class Task {
@@ -19,5 +24,8 @@ public class Task {
     private String description;
     private Date completionDate;
     private Boolean overdue;
-    private String assignedTo;
+
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    private User assignedTo;
 }
