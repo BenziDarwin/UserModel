@@ -25,7 +25,7 @@ public class Task {
     private Date completionDate;
     private Boolean overdue;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.DETACH)
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User assignedTo;
 }
