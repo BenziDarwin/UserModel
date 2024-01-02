@@ -62,4 +62,30 @@ public class TaskService {
          response.put("success", true);
          return response;
     }
+
+    public Task updateTask(Task request, Long assignedTo) {
+        try{
+            Optional<User> user = usersRepository.findById(assignedTo);
+            Optional<Task> task = taskRepository.findById(request.getId());
+
+            if(user.isPresent() && task.isPresent()){
+
+                User assignee = user.get();
+                Task currentTask = task.get();
+
+                currentTask.setName(request.getName());
+                currentTask.setDescription(request.getDescription());
+                currentTask.setCompletionDate(request.getCompletionDate());
+                currentTask.setOverdue(request.getOverdue());
+                currentTask.setAssignedTo(assignee);
+
+                return taskRepository.save(currentTask);
+
+            } else{
+                return null;
+            }
+        } catch (Exception e){
+            throw e;
+        }
+    }
 }
