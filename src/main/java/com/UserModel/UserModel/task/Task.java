@@ -24,6 +24,8 @@ public class Task {
     private String description;
     private Date completionDate;
     private Boolean overdue;
+    private Boolean completed;
+    private String reason;
 
     @ManyToOne(cascade = CascadeType.DETACH)
     @JoinColumn(name = "user_id", referencedColumnName = "id")
