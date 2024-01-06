@@ -1,5 +1,7 @@
 package com.UserModel.UserModel.task;
 
+import com.UserModel.UserModel.MonthlyGoal.MonthlyGoal;
+import com.UserModel.UserModel.MonthlyGoal.MonthlyGoalRepository;
 import com.UserModel.UserModel.User.User;
 import com.UserModel.UserModel.User.UsersRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,13 +20,15 @@ public class TaskService {
     @Autowired
     private UsersRepository usersRepository;
 
-    public Task createTask(Task request, Long userId){
+    @Autowired
+    private MonthlyGoalRepository monthlyGoalRepository;
 
-        try{
+    public Task createTask(Task request, Long userId, Long mtID){
 
         Optional<User> user = usersRepository.findById(userId);
+        Optional<MonthlyGoal> monthlyGoal = monthlyGoalRepository.findById(mtID);
 
-        if(user.isPresent()){
+        if(user.isPresent() && monthlyGoal.isPresent()){
             User assignee = user.get();
             Task task = Task.builder()
                     .name(request.getName())
@@ -32,22 +36,13 @@ public class TaskService {
                     .completionDate(request.getCompletionDate())
                     .overdue(request.getOverdue())
                     .assignedTo(assignee)
+                    .monthlyGoal(monthlyGoal.get())
                     .build();
 
             return taskRepository.save(task);
 
         } else{
-            Task task = Task.builder()
-                    .name(request.getName())
-                    .description(request.getDescription())
-                    .completionDate(request.getCompletionDate())
-                    .overdue(request.getOverdue())
-                    .assignedTo(null)
-                    .build();
-            return taskRepository.save(task);
-        }
-        } catch (Exception e){
-             throw e;
+            return null;
         }
 
     }
@@ -63,21 +58,24 @@ public class TaskService {
          return response;
     }
 
-    public Task updateTask(Task request, Long assignedTo) {
+    public Task updateTask(Task request, Long assignedTo, Long mtID) {
         try{
             Optional<User> user = usersRepository.findById(assignedTo);
             Optional<Task> task = taskRepository.findById(request.getId());
+            Optional<MonthlyGoal> monthlyGoal = monthlyGoalRepository.findById(mtID);
 
-            if(user.isPresent() && task.isPresent()){
+            if(user.isPresent() && task.isPresent() && monthlyGoal.isPresent()){
 
                 User assignee = user.get();
                 Task currentTask = task.get();
+                MonthlyGoal monthlyGoal1 = monthlyGoal.get();
 
                 currentTask.setName(request.getName());
                 currentTask.setDescription(request.getDescription());
                 currentTask.setCompletionDate(request.getCompletionDate());
                 currentTask.setOverdue(request.getOverdue());
                 currentTask.setAssignedTo(assignee);
+                currentTask.setMonthlyGoal(monthlyGoal1);
 
                 return taskRepository.save(currentTask);
 

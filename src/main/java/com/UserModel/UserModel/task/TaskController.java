@@ -11,15 +11,17 @@ import java.util.List;
 @RequestMapping("/api/v1")
 @CrossOrigin(origins = "*")
 public class TaskController {
-
     @Autowired
     private TaskService taskService;
 
-    @PostMapping("/tasks/{userID}")
-    public ResponseEntity<?> createTask( @PathVariable Long userID, @RequestBody Task task){
-
+    @PostMapping("/tasks/{userID}/{mtID}")
+    public ResponseEntity<?> createTask(
+            @PathVariable Long userID,
+            @PathVariable Long mtID,
+            @RequestBody Task task
+    ){
         try{
-            Task response = taskService.createTask(task, userID);
+            Task response = taskService.createTask(task, userID, mtID);
             return new ResponseEntity<>(response, HttpStatus.CREATED);
         } catch (Exception e){
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
@@ -46,10 +48,14 @@ public class TaskController {
         }
     }
 
-    @PutMapping("/tasks/{assignedTo}")
-    public ResponseEntity<Object> updateTask(@PathVariable Long assignedTo, @RequestBody Task task){
+    @PutMapping("/tasks/{assignedTo}/{mtID}")
+    public ResponseEntity<Object> updateTask(
+            @PathVariable Long assignedTo,
+            @PathVariable Long mtID,
+            @RequestBody Task task
+    ){
         try{
-            Task response = taskService.updateTask(task, assignedTo);
+            Task response = taskService.updateTask(task, assignedTo, mtID);
             return new ResponseEntity<>(response, HttpStatus.OK);
         }catch (Exception e){
             return new ResponseEntity<>(e, HttpStatus.INTERNAL_SERVER_ERROR);

@@ -1,6 +1,7 @@
 package com.UserModel.UserModel.MonthlyGoal;
 
 import com.UserModel.UserModel.QuarterlyGoal.QuarterlyGoal;
+import com.UserModel.UserModel.task.Task;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -9,6 +10,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
+
+import java.util.List;
 
 @Entity
 @NoArgsConstructor
@@ -40,4 +43,7 @@ public class MonthlyGoal {
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonIgnore
     private QuarterlyGoal quarterlyGoal;
+
+    @OneToMany(mappedBy = "monthlyGoal", cascade = CascadeType.ALL)
+    private List<Task> tasks;
 }
