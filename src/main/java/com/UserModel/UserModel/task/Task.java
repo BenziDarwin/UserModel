@@ -1,7 +1,6 @@
 package com.UserModel.UserModel.task;
 
 import com.UserModel.UserModel.MonthlyGoal.MonthlyGoal;
-import com.UserModel.UserModel.QuarterlyGoal.QuarterlyGoal;
 import com.UserModel.UserModel.User.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
@@ -31,6 +30,10 @@ public class Task {
     private Boolean overdue;
     private Boolean completed;
     private String reason;
+    private String objective;
+    private String approval;
+    private String feedback;
+    private String status;
 
     @ManyToOne(cascade = CascadeType.DETACH)
     @JoinColumn(name = "user_id", referencedColumnName = "id")
