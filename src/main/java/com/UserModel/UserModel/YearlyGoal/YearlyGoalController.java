@@ -17,6 +17,10 @@ public class YearlyGoalController {
     @Autowired
     private YearlyGoalService yearlyGoalService;
 
+    public YearlyGoalController(YearlyGoalService yearlyGoalService) {
+        this.yearlyGoalService = yearlyGoalService;
+    }
+
     @GetMapping("/yearly-goals")
     public ResponseEntity<?> fetchAllYearlyGoals (){
         try{
@@ -24,6 +28,20 @@ public class YearlyGoalController {
             return new ResponseEntity<>(response, HttpStatus.OK);
         } catch (Exception e){
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping("/yearly-goals/{yearlyGoalID}")
+    public ResponseEntity<?> fetchSingleYearlyGoal(@PathVariable Long yearlyGoalID){
+        try{
+            YearlyGoal response = yearlyGoalService.findYearlyGoal(yearlyGoalID);
+            if(response != null){
+                return new ResponseEntity<>(response, HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+            }
+        } catch (Exception e){
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NO_CONTENT);
         }
     }
 

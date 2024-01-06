@@ -47,4 +47,8 @@ public class YearlyGoalService {
     public void deleteYearlyGoal (Long id){
         yearlyGoalRepository.deleteById(id);
     }
+
+    public YearlyGoal findYearlyGoal(Long yearlyGoalID) {
+        return yearlyGoalRepository.findById(yearlyGoalID).orElse(null);
+    }
 }
