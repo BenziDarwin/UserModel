@@ -1,5 +1,6 @@
 package com.UserModel.UserModel.QuarterlyGoal;
 
+import com.UserModel.UserModel.MonthlyGoal.MonthlyGoal;
 import com.UserModel.UserModel.YearlyGoal.YearlyGoal;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
@@ -9,6 +10,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
+
+import java.util.List;
 
 @Entity
 @Data
@@ -41,4 +44,6 @@ public class QuarterlyGoal {
     @JsonIgnore
     private YearlyGoal yearlyGoal;
 
+    @OneToMany(mappedBy = "quarterlyGoal", cascade = CascadeType.ALL)
+    private List<MonthlyGoal> monthlyGoals;
 }
