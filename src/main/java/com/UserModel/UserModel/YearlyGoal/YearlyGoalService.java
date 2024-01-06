@@ -36,7 +36,6 @@ public class YearlyGoalService {
             data.setRating_ID(yearlyGoal.getRating_ID());
             data.setYg_Approval_Status(yearlyGoal.getYg_Approval_Status());
             data.setYg_Completion_Date(yearlyGoal.getYg_Completion_Date());
-
             return yearlyGoalRepository.save(data);
 
         } else {

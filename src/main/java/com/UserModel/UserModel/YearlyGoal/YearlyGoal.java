@@ -1,9 +1,14 @@
 package com.UserModel.UserModel.YearlyGoal;
 
+import com.UserModel.UserModel.QuarterlyGoal.QuarterlyGoal;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.Collection;
+import java.util.List;
 
 @Entity
 @NoArgsConstructor
@@ -26,4 +31,8 @@ public class YearlyGoal {
     private Long rating_ID;
     private String yg_Approval_Status;
     private String yg_Completion_Date;
+    private String yg_Department;
+
+    @OneToMany(mappedBy = "yearlyGoal", cascade = CascadeType.ALL)
+    private List<QuarterlyGoal> quarterlyGoals;
 }
