@@ -37,6 +37,12 @@ public class TaskService {
                     .overdue(request.getOverdue())
                     .assignedTo(assignee)
                     .monthlyGoal(monthlyGoal.get())
+                    .completed((request.getCompleted()))
+                    .approval(request.getApproval())
+                    .feedback(request.getFeedback())
+                    .objective(request.getObjective())
+                    .reason(request.getReason())
+                    .status(request.getStatus())
                     .build();
 
             return taskRepository.save(task);
@@ -74,6 +80,12 @@ public class TaskService {
                 currentTask.setDescription(request.getDescription());
                 currentTask.setCompletionDate(request.getCompletionDate());
                 currentTask.setOverdue(request.getOverdue());
+                currentTask.setCompleted(request.getCompleted());
+                currentTask.setReason(request.getReason());
+                currentTask.setObjective(request.getObjective());
+                currentTask.setApproval(request.getApproval());
+                currentTask.setFeedback(request.getFeedback());
+                currentTask.setStatus(request.getStatus());
                 currentTask.setAssignedTo(assignee);
                 currentTask.setMonthlyGoal(monthlyGoal1);
 
@@ -85,5 +97,32 @@ public class TaskService {
         } catch (Exception e){
             throw e;
         }
+    }
+
+    public Task completeTask(Task request, Long taskID, Long assignedTo) {
+
+            Optional<Task> task = taskRepository.findById(taskID);
+            Optional<User> user = usersRepository.findById(assignedTo);
+
+            if( task.isPresent() && user.isPresent()){
+                Task currentTask = task.get();
+                currentTask.setCompleted(request.getCompleted());
+                currentTask.setName(request.getName());
+                currentTask.setDescription(request.getDescription());
+                currentTask.setCompletionDate(request.getCompletionDate());
+                currentTask.setOverdue(request.getOverdue());
+                currentTask.setCompleted(request.getCompleted());
+                currentTask.setReason(request.getReason());
+                currentTask.setObjective(request.getObjective());
+                currentTask.setApproval(request.getApproval());
+                currentTask.setFeedback(request.getFeedback());
+                currentTask.setStatus(request.getStatus());
+                currentTask.setAssignedTo(user.get());
+                currentTask.setMonthlyGoal(currentTask.getMonthlyGoal());
+                return taskRepository.save(currentTask);
+
+            } else{
+                return null;
+            }
     }
 }

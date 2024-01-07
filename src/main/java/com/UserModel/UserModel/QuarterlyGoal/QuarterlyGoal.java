@@ -18,7 +18,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Table(name = "quarterly-goals")
+@Table(name = "quarterly_goals")
 public class QuarterlyGoal {
 
     @Id

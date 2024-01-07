@@ -61,4 +61,18 @@ public class TaskController {
             return new ResponseEntity<>(e, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    @PutMapping("/complete-task/{taskID}/{assignedTo}")
+    public ResponseEntity<Object> completeTask(
+            @PathVariable Long taskID,
+            @PathVariable Long assignedTo,
+            @RequestBody Task task
+    ){
+        try {
+            Task response = taskService.completeTask(task, taskID, assignedTo );
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        } catch (Exception e){
+            return new ResponseEntity<>(e, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }

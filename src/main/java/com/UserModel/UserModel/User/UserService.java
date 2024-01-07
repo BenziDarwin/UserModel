@@ -15,6 +15,8 @@ import com.UserModel.UserModel.User.Models.LoginRequest;
 import com.UserModel.UserModel.User.Models.Passwords;
 import com.UserModel.UserModel.User.Models.RegisterRequest;
 import com.UserModel.UserModel.User.Models.UpdateUser;
+import com.UserModel.UserModel.task.Task;
+import com.UserModel.UserModel.task.TaskRepository;
 import jakarta.security.auth.message.AuthException;
 import lombok.RequiredArgsConstructor;
 import org.apache.maven.surefire.shared.lang3.RandomStringUtils;
@@ -40,6 +42,7 @@ public class UserService {
     private final MailingServiceService mailingService;
     private final ResetTokensRepository resetRepository;
     private final RolesRepository rolesRepository;
+    private final TaskRepository taskRepository;
 
 
     public AuthenticationResponse registerAdmin(RegisterRequest request) throws AuthException {
@@ -286,5 +289,15 @@ public class UserService {
             token.setRevoked(true);
         });
         tokenRepository.saveAll(validUserTokens);
+    }
+
+    public Map<String,Object> getSingleUser(Long userID) {
+        Map<String, Object> data = new HashMap<String, Object>();
+
+        List<Task> tasks = taskRepository.findTasksByUserId(userID);
+        User user = userRepository.findById(userID).orElse(null);
+        data.put("user", user);
+        data.put("tasks", tasks);
+        return data;
     }
 }

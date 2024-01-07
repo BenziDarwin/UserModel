@@ -51,6 +51,7 @@ public class YearlyGoalController {
             YearlyGoal response = yearlyGoalService.saveYearlyGoal(yearlyGoal);
             return new ResponseEntity<>(response, HttpStatus.CREATED);
         } catch (Exception e){
+            e.printStackTrace();
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
