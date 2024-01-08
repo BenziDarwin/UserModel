@@ -19,6 +19,10 @@ import java.util.Map;
 public class UserController {
     private final UserService userService;
 
+    public UserController(UserService userService) {
+        this.userService = userService;
+    }
+
     @PostMapping("/admin-register")
     public ResponseEntity<AuthenticationResponse> registerAdmin(@RequestBody RegisterRequest request) throws AuthException {
         return ResponseEntity.ok(userService.registerAdmin(request));
