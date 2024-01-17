@@ -27,6 +27,7 @@ public class Task {
     private String name;
     private String description;
     private Date completionDate;
+    private Date expectedCompletionDate;
     private Boolean overdue;
     private Boolean completed;
     private String reason;

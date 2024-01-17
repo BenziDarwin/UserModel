@@ -33,8 +33,20 @@ public class RolesService {
                 ArrayList<String> lst = role.getPermissions();
                 lst.forEach(permission -> permission.toUpperCase());
                 lst.stream().filter(permission -> List.of("WRITE", "READ","DELETE","UPDATE").contains(permission));
+
+                System.out.println("..................");
+                System.out.println("..................");
+                System.out.println("..................");
+                System.out.println(role);
+
+                System.out.println("..................");
+                System.out.println("..................");
+                System.out.println("..................");
+                System.out.println("..................");
+
                 Roles newRole = Roles.builder()
                         .roleName(role.getRoleName().toUpperCase().strip())
+                        .department(role.getDepartment())
                         .permissions(lst)
                         .activities(role.getActivities())
                         .build();

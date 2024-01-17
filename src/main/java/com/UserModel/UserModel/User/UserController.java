@@ -4,6 +4,7 @@ import com.UserModel.UserModel.ResetTokens.Models.TokenModel;
 import com.UserModel.UserModel.User.Models.*;
 import jakarta.security.auth.message.AuthException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,11 +18,8 @@ import java.util.Map;
 @RequiredArgsConstructor
 @CrossOrigin(origins = "*")
 public class UserController {
-    private final UserService userService;
-
-    public UserController(UserService userService) {
-        this.userService = userService;
-    }
+    @Autowired
+    private UserService userService;
 
     @PostMapping("/admin-register")
     public ResponseEntity<AuthenticationResponse> registerAdmin(@RequestBody RegisterRequest request) throws AuthException {

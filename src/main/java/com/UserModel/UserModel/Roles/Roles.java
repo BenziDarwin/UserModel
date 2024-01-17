@@ -30,6 +30,7 @@ public class Roles {
     private Long id;
     private String roleName;
     private Integer weight;
+    private String department;
     private ArrayList<String> permissions;
     private ArrayList<String> activities;
 

@@ -46,6 +46,7 @@ public class QuarterlyGoalService {
                     .rating_ID(request.getRating_ID())
                     .qt_Approval_Status(request.getQt_Approval_Status())
                     .qt_Completion_Date(request.getQt_Completion_Date())
+                    .qt_Period(request.getQt_Period())
                     .yearlyGoal(yearlyGoal.get())
                     .build();
 
@@ -85,5 +86,9 @@ public class QuarterlyGoalService {
             return null;
         }
 
+    }
+
+    public List<YearlyGoal> listQuarterlyGoalsAndYears(){
+        return yearlyGoalRepository.findAll();
     }
 }

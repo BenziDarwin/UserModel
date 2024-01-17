@@ -14,6 +14,7 @@ import java.util.ArrayList;
 public class Role {
     private String roleName;
     private Integer weight;
+    private String department;
     private ArrayList<String> permissions;
     private ArrayList<String> activities;
 }

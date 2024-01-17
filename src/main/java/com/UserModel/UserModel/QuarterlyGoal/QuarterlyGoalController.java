@@ -1,5 +1,6 @@
 package com.UserModel.UserModel.QuarterlyGoal;
 
+import com.UserModel.UserModel.YearlyGoal.YearlyGoal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -66,6 +67,16 @@ public class QuarterlyGoalController {
             return new ResponseEntity<>(response,HttpStatus.OK);
         } catch (Exception e){
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping("/quarterly-goals-years")
+    public ResponseEntity<?> listQuarterlyGoalsAndYears(){
+        try{
+            List<YearlyGoal> response = quarterlyGoalService.listQuarterlyGoalsAndYears();
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        } catch (Exception e){
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NO_CONTENT);
         }
     }
 }
