@@ -19,14 +19,6 @@ public class RolesController {
     @PostMapping("/add-role")
     public ResponseEntity<HashMap<String, String>> addRole(@RequestBody Role role) {
         try {
-            System.out.println("..................");
-            System.out.println("..................");
-            System.out.println("..................");
-            System.out.println("..................");
-            System.out.println(role);
-            System.out.println("..................");
-            System.out.println("..................");
-            System.out.println("..................");
             return ResponseEntity.ok(rolesService.addRole(role));
         } catch (Exception e) {
             throw new RuntimeException(e.getMessage());
