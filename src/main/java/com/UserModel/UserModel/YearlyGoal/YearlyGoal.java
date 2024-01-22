@@ -1,13 +1,11 @@
 package com.UserModel.UserModel.YearlyGoal;
 
 import com.UserModel.UserModel.QuarterlyGoal.QuarterlyGoal;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Collection;
 import java.util.List;
 
 @Entity
