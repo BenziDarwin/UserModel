@@ -6,7 +6,6 @@ import com.UserModel.UserModel.User.User;
 import com.UserModel.UserModel.User.UsersRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
-import jakarta.persistence.Query;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +19,6 @@ import java.util.Optional;
 
 @Service
 public class TaskService {
-    private static final Logger logger = LoggerFactory.getLogger(TaskService.class);
     @Autowired
     private TaskRepository taskRepository;
 
@@ -138,21 +136,15 @@ public class TaskService {
 
     @Transactional
     private void updateGoalStatus(Long monthlyGoalId) {
-        try {
-            taskRepository.completeGoal(monthlyGoalId);
-        } catch (Exception e) {
-            logger.error("Error updating goal status", e);
-            throw e;
-        }
-    }
+        taskRepository.completeMonthlyGoal(monthlyGoalId);
 
+        MonthlyGoal monthlyGoal = monthlyGoalRepository.findById(monthlyGoalId).orElse(null);
+        assert monthlyGoal != null;
+        updateQuarterlyGoalStatus(monthlyGoal.getQuarterlyGoal().getId());
+
+    }
+    @Transactional
     private void updateQuarterlyGoalStatus(Long quarterlyGoalId) {
-        Query query = entityManager.createQuery(
-                "UPDATE QuarterlyGoal q " +
-                        "SET q.qt_Status = CASE WHEN (SELECT COUNT(m) FROM MonthlyGoal m WHERE m.quarterlyGoal.id = :quarterlyGoalId AND m.mt_Status = 'incomplete') = 0 THEN 'complete' ELSE 'incomplete' END " +
-                        "WHERE q.id = :quarterlyGoalId"
-        );
-        query.setParameter("quarterlyGoalId", quarterlyGoalId);
-        query.executeUpdate();
+        taskRepository.completeQuarterlyGoal(quarterlyGoalId);
     }
 }
